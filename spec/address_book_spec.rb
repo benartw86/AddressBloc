@@ -37,12 +37,28 @@ RSpec.describe AddressBook do
      end
    end
    
-  describe "#remove_entry" do
-    it "removes only one entry from the address book" do
-      book = AddressBook.new
-      book.remove_entry('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com')
+##  describe "#remove_entry" do
+#    it "removes only one entry from the address book" do
+#      book = AddressBook.new
+#      book.remove_entry('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com')
     
-      expect(book.entries.size).to eq(0)
-    end
-   end 
+#     expect(book.entries.size).to eq(0)
+#    end
+#   end 
+ 
+  it "removes an entry using name, phone number and email address" do
+    book = AddressBook.new
+    book.add_entry("Ben", "123.456.789", "bendo@yahoo.com")
+    
+    #create second entry to have one to delete
+    name = 'Ada Lovelace'
+    phone_number = '010.012.1815'
+    email_address = 'augusta.king@lovelace.com'
+    book.add_entry(name, phone_number, email_address) #add in second entry
+    
+    expect(book.entries.size).to eq(2)  #confirm that there are two addresses in entries array
+    book.remove_entry(name, phone_number, email_address)  #remove the requested address
+    expect(book.entries.size).to eq(1)  #confirm that there is now one entry
+    expect(book.entries.first.name).to eq("Ben")  #confirm that entry matches the one that should still be in the array 
+  end
  end
