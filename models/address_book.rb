@@ -17,8 +17,17 @@ class AddressBook
         break                #if name proceeds entry.name stop and insert it
       end
       index += 1             #of name does not proceed entry.name continue comparing
-  end
+    end 
     
     entries.insert(index, Entry.new(name, phone_number, email))     #insert a new entry into entries using the calculated index variable
+  end
+  
+  def remove_entry(name, phone_number, email)
+    
+    entries.each_with_index do |entry, index|
+      if name == entry.name
+        entries.delete_at(index)    
+      end
+    end
   end
 end
