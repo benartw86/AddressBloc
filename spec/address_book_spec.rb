@@ -2,13 +2,13 @@ require_relative '../models/address_book'
 
 RSpec.describe AddressBook do
     
-  def check_entry(entry, expected_name, expected_number, expected_email)  #helper method consolidates redundant code, can be used to check entries
+    let(:book) {AddressBook.new} #let allows use of variable book in all tests
+    
+    def check_entry(entry, expected_name, expected_number, expected_email)  #helper method consolidates redundant code, can be used to check entries
       expect(entry.name).to eq expected_name
       expect(entry.phone_number).to eq expected_number
       expect(entry.email).to eq expected_email
-  end 
-    
-    let(:book) {AddressBook.new} #let allows use of variable book in all tests
+    end 
     
     describe "attributes" do
       it "respond to entries" do  #it explains the functionality of a method
@@ -61,36 +61,59 @@ RSpec.describe AddressBook do
        book.import_from_csv("entries.csv")
        # Check the second entry
        entry_two = book.entries[1]
-       expect(entry_two.name).to eq "Bob"
-       expect(entry_two.phone_number).to eq "555-555-5415"
-       expect(entry_two.email).to eq "bob@blocmail.com"
+       check_entry(entry_two, "Bob", "555-555-5415", "bob@blocmail.com")
      end
  
      it "imports the 3rd entry" do
        book.import_from_csv("entries.csv")
        # Check the third entry
        entry_three = book.entries[2]
-       expect(entry_three.name).to eq "Joe"
-       expect(entry_three.phone_number).to eq "555-555-3660"
-       expect(entry_three.email).to eq "joe@blocmail.com"
+       check_entry(entry_three, "Joe", "555-555-3660", "joe@blocmail.com")
      end
  
      it "imports the 4th entry" do
        book.import_from_csv("entries.csv")
        # Check the fourth entry
        entry_four = book.entries[3]
-       expect(entry_four.name).to eq  "Sally"
-       expect(entry_four.phone_number).to eq "555-555-4646"
-       expect(entry_four.email).to eq "sally@blocmail.com"
+       check_entry(entry_four, "Sally", "555-555-4646", "sally@blocmail.com")
      end
  
      it "imports the 5th entry" do
        book.import_from_csv("entries.csv")
        # Check the fifth entry
        entry_five = book.entries[4]
-       expect(entry_five.name).to eq "Sussie"
-       expect(entry_five.phone_number).to eq "555-555-2036"
-       expect(entry_five.email).to eq "sussie@blocmail.com"
+       check_entry(entry_five, "Sussie", "555-555-2036", "sussie@blocmail.com")
      end
    end
- end
+   
+  describe "#import_from_csv" do 
+    it "Imports correct entries from second CSV file" do
+    
+    book.import_from_csv("entries_2.csv")
+    book_size2 = book.entries.size
+    
+    expect(book_size2).to eq(3)
+  end
+  
+    it "imports the first entry of csv_2" do
+    book.import_from_csv("entries_2.csv")
+    
+    entries_2_one = book.entries[0]
+    check_entry(entries_2_one, "Bilbo", "123-123-1234", "bilbo@shire.net")
+  end
+    
+    it "imports the second entry of csv_2" do
+    book.import_from_csv("entries_2.csv")
+    
+    entries_2_two = book.entries[1]
+    check_entry(entries_2_two, "Frodo", "123-123-1235", "frodo@shire.net")
+  end
+  
+  it "imports the third entry of csv_2" do
+    book.import_from_csv("entries_2.csv")
+    
+    entries_2_three = book.entries[2]
+    check_entry(entries_2_three, "Gandalf", "123-123-1236", "gandalf@shire.net")
+  end
+ end 
+end
