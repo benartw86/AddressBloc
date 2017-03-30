@@ -82,9 +82,43 @@ class MenuController        #needs methods to display main menu and process user
   end
   
   def search_entries
-  end
+    print "Search by name: "    #get the name the user is searching for
+    name = gets.chomp
+    
+    match = address_book.binary_search(name)    #call search on address book class/array,returns match or nil
+    system "clear"
+    
+    if match          #if search returns nil, this evaluates to false and puts the no match found
+      puts match.to_s  #if there is a match the helper method is called that displays a sub menu of operations that can be performed on an Entry
+      search_submenu(match)
+    else
+      puts "No match found for #{name}"
+    end 
+  end 
   
   def read_csv
+  
+    print "Enter CSV file to import: "
+    file_name = gets.chomp              # prompt user get the filename from standard input
+    
+    if file_name.empty?  # check to see if filename is empty
+      system "clear"
+      puts "No CSV file read"
+      main_menu
+    end
+    
+    begin       # protects program from crash if exception thrown
+      entry_count = address_book.import_from_csv(file_name).count
+      system "clear"
+      puts "#{entry_count} new entries added from #{file_name}"
+    rescue      # rescue catches the exception and runs the code below instead of crashing program, calls import_from_csv again on new file
+      puts "#{file_name} is not a valid CSV file, please enter the name of valid CSV file"
+    end
+  end
+  
+  def delete_entry(entry)       #delete entry from address_book
+    address_book.entries.delete(entry)
+    puts "#{entry.name} has been deleted"
   end
   
   def entry_submenu(entry)
@@ -102,7 +136,12 @@ class MenuController        #needs methods to display main menu and process user
         
       when "d"
         
+        delete_entry(entry)
+        
       when "e"
+        
+        edit_entry(entry)   #call edit_entry when a user presses "e", then display a sub-menu with entry_submenu
+        entry_submenu(entry)
         
       when "m"      #return to main menu
         system "clear"
@@ -112,4 +151,50 @@ class MenuController        #needs methods to display main menu and process user
         entry_submenu(entry)
     end
   end
-end 
+  
+  def edit_entry(entry)
+    
+    print "Updated name: "
+    name = gets.chomp
+    print "Updated phone number: "
+    phone_number = gets.chomp
+    print "Updated email: "
+    email = gets.chomp
+              
+    entry.name = name if !name.empty?                           #use !attribute.empty? to set attributes on entry only if a valid attribute was read from user input 
+    entry.phone_number = phone_number if !phone_number.empty?     
+    entry.email = email if !email.empty?
+    system "clear"
+    
+    puts "Updated entry:"
+    puts entry
+  end
+  
+  def search_submenu(entry)
+    
+    puts "\nd - delete entry"
+    puts "e - edit this entry"
+    puts "m - return to main menu"
+    
+    selection = gets.chomp
+    
+    case selection    #take specific action based on user input
+      when "d"
+        system "clear"
+        delete_entry(entry)
+        main_menu
+      when "e"
+        edit_entry(entry)
+        system "clear"
+        main_menu
+      when "m"
+        system "clear"
+        main_menu
+      else
+        system "clear"
+        puts "#{selection} is not a valid input"
+        puts entry.to_s
+        search_submenu(entry)
+    end
+  end
+end
