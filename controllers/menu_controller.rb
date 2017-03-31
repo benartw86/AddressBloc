@@ -16,7 +16,8 @@ class MenuController        #needs methods to display main menu and process user
     puts "2 - Create an entry"
     puts "3 - Search for an entry"
     puts "4 - Import entries from a CSV"
-    puts "5 - Exit"
+    puts "5 - Delete all entries!"
+    puts "6 - Exit"
     print "Enter your selection: "
     
     selection = gets.to_i       #retrieve user input from the command line using gets
@@ -39,6 +40,11 @@ class MenuController        #needs methods to display main menu and process user
         read_csv
         main_menu
       when 5
+        system "clear"
+        @address_book.nuclear
+        puts "All entries nucleared!"
+        main_menu
+      when 6
         puts "Goodbye"
         
         exit(0)  #terminates the program, 0 signals exit without errors

@@ -8,6 +8,10 @@ class AddressBook
       @entries = []
         
     end
+    
+  def nuclear
+    @entries = [] #set it to empty array, 
+  end  
 
   def add_entry(name, phone_number, email)
     

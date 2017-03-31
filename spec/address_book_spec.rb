@@ -6,7 +6,18 @@ RSpec.describe AddressBook do
       expect(entry.name).to eq expected_name
       expect(entry.phone_number).to eq expected_number
       expect(entry.email).to eq expected_email
-  end 
+  end
+  
+  describe "#nuclear" do
+    it "Destroys all entries" do
+    book.add_entry('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com')
+    book.add_entry('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com')
+    book.add_entry('Ada Lovelace', '010.012.1815', 'augusta.king@lovelace.com')
+    
+    book.nuclear
+    expect(book.entries.size).to eq 0
+  end
+end
     
     let(:book) {AddressBook.new} #let allows use of variable book in all tests
     
@@ -133,5 +144,5 @@ RSpec.describe AddressBook do
       entry = book.binary_search("Billy")
       expect(entry).to be_nil
     end
-   end
+  end
 end
